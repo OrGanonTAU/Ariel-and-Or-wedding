@@ -1,1 +1,675 @@
-<h1>Or & Ariel</h1>
+<!DOCTYPE html>
+<!-- wedding_invitation: Ariel & Or's masquerade-ball wedding site - a realistic sealed envelope opens to reveal the invitation, details and a personal RSVP form -->
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>אריאל ואור · נשף מסכות</title>
+<meta property="og:title" content="אריאל ואור מתחתנים · נשף מסכות 🎭">
+<meta property="og:description" content="יום ראשון, 28.3.2027 · אולמי סיאל, חיפה">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Bellefair&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ew: min(88vw, 500px);              /* envelope width */
+    --eh: calc(var(--ew) / 1.45);        /* envelope height */
+    --gold: #d4af6a; --gold-deep: #a8813c; --gold-light: #f3dfaa;
+    --ivory: #fbf6ec; --ink: #2b2230; --wine: #6e1f33;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  html { background: #1a1128; }
+  body { font-family: 'Bellefair', serif; color: var(--ivory); overflow-x: hidden; min-height: 100svh;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(214,170,110,.18), transparent 70%),
+      radial-gradient(ellipse 120% 80% at 50% 110%, #2a1030 0%, transparent 60%),
+      linear-gradient(180deg, #0f0c1d 0%, #1a1128 55%, #24112b 100%);
+    background-attachment: fixed; }
+  body.locked { overflow: hidden; height: 100svh; }
+
+  /* ---------- ballroom ambience ---------- */
+  .damask { position: fixed; inset: 0; pointer-events: none; opacity: .06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='160' viewBox='0 0 120 160'%3E%3Cg fill='none' stroke='%23d4af6a' stroke-width='1.2'%3E%3Cpath d='M60 10c18 20 30 34 30 52s-14 30-30 30-30-12-30-30 12-32 30-52z'/%3E%3Cpath d='M60 30c9 12 15 20 15 31s-7 17-15 17-15-6-15-17 6-19 15-31z'/%3E%3Cpath d='M60 92v30M45 135c5-8 10-13 15-13s10 5 15 13M30 120c10 0 20 4 30 2 10 2 20-2 30-2'/%3E%3Cpath d='M0 80c10-6 20-6 30 0M90 80c10-6 20-6 30 0'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 120px 160px; }
+  .bokeh, .dust { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .bokeh i { position: absolute; border-radius: 50%; filter: blur(var(--b));
+    background: radial-gradient(circle, rgba(255,214,150,.55), rgba(255,190,120,0) 70%);
+    animation: glow var(--d) ease-in-out var(--delay) infinite alternate; }
+  @keyframes glow { from { opacity: .25; transform: scale(.9); } to { opacity: .8; transform: scale(1.1); } }
+  .dust i { position: absolute; width: var(--s); height: var(--s); border-radius: 50%; background: var(--gold-light);
+    box-shadow: 0 0 6px rgba(243,223,170,.9); opacity: 0; animation: drift var(--d) linear var(--delay) infinite; }
+  @keyframes drift { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: .9; } 85% { opacity: .6; }
+                     100% { opacity: 0; transform: translate(var(--x), -45vh); } }
+
+  /* ---------- envelope scene ---------- */
+  .scene { position: relative; z-index: 2; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding-top: calc(var(--eh) * .55); perspective: 1600px; }
+  .tilt { transition: transform .4s ease-out; transform-style: preserve-3d; }
+  .envelope { cursor: pointer; position: relative; width: var(--ew); height: var(--eh); transform-style: preserve-3d;
+    transition: transform 1.2s cubic-bezier(.5,0,.3,1), opacity 1.2s; }
+  .envelope.leave { transform: translateY(60vh) rotateX(25deg); opacity: 0; }
+  .paper::after { /* paper fibre texture */
+    content: ''; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .48 0 0 0 0 .38 0 0 0 .28 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .env-shadow { position: absolute; left: 4%; right: 4%; bottom: -14%; height: 22%; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(0,0,0,.55), transparent 70%); filter: blur(10px); }
+  .env-back { position: absolute; inset: 0; border-radius: 4px; overflow: hidden; background-color: #f1ece2;
+    background-image:
+      linear-gradient(var(--ldir, 135deg), rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,.08) 100%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,.035) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,.035) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-position: 0 0, 0 1px, 1px 0, 0 0, 0 0; }
+  .linen { background-color: #f1ece2;
+    background-image:
+      linear-gradient(var(--ldir, 135deg), rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,.08) 100%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,.035) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,.035) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-position: 0 0, 0 1px, 1px 0, 0 0, 0 0; }
+  .liner { position: absolute; inset: 3% 3% 40% 3%; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%);
+    background: radial-gradient(circle at 50% 0%, rgba(255,240,200,.35), transparent 60%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4c6 7 10 11 10 17s-5 9-10 9-10-3-10-9 4-10 10-17zM0 40c7-4 15-4 22 0 7-4 15-4 22 0' fill='none' stroke='%23e6c983' stroke-width='1.3'/%3E%3C/svg%3E") 0 0 / 44px 44px,
+                linear-gradient(180deg, #5a1a2c, #3d1020); }
+
+  .card-peek { position: absolute; left: 5%; right: 5%; top: 6%; height: 88%; border-radius: 3px; background: var(--ivory);
+    box-shadow: 0 2px 8px rgba(0,0,0,.18); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 7%;
+    transition: transform 1.3s cubic-bezier(.4,0,.2,1); }
+  .card-peek::before { content: ''; position: absolute; inset: 7px; border: 1px solid rgba(168,129,60,.6); outline: 1px solid rgba(168,129,60,.3); outline-offset: 3px; }
+  .card-peek svg { width: 30%; }
+  .card-peek .script { font-family: 'Pinyon Script', cursive; color: var(--gold-deep); font-size: calc(var(--ew) * .075); direction: ltr; margin-top: 2%; }
+  .card-peek.out { transform: translateY(-62%); }
+
+  /* front pocket made of three folded flaps */
+  .pocket { position: absolute; inset: 0; pointer-events: none; }
+  .pocket > div { position: absolute; inset: 0; }
+  .fold-left  { clip-path: polygon(0 0, 52% 58%, 0 100%); --ldir: 100deg; }
+  .fold-right { clip-path: polygon(100% 0, 48% 58%, 100% 100%); --ldir: 260deg; }
+  .fold-bottom { clip-path: polygon(0 100%, 50% 46%, 100% 100%); --ldir: 0deg;
+    filter: drop-shadow(0 -2px 3px rgba(80,60,30,.18)); }
+  .pocket .edge { background: linear-gradient(to top right, transparent calc(50% - 1px), rgba(255,255,255,.55) 50%, transparent calc(50% + 1px)) left bottom / 50% 54% no-repeat,
+                               linear-gradient(to top left, transparent calc(50% - 1px), rgba(255,255,255,.55) 50%, transparent calc(50% + 1px)) right bottom / 50% 54% no-repeat; }
+
+  .envelope { perspective: 900px; perspective-origin: 50% 0%; }
+  .flap { position: absolute; left: 0; right: 0; top: 0; height: 69%; transform-origin: 50% 0; transform-style: preserve-3d; z-index: 5; }
+  .flap .outside::after, .flap .inside::after { content: ''; position: absolute; inset: 0; background: #1a0f08; opacity: 0; pointer-events: none; }
+  .flap .face { position: absolute; inset: 0; clip-path: polygon(0 0, 100% 0, 54% 95.5%, 50% 100%, 46% 95.5%); backface-visibility: hidden; }
+  .flap .outside { --ldir: 180deg; }
+  .flap .outside::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to bottom right, transparent calc(50% - 1.5px), rgba(255,255,255,.5) calc(50% - .5px), transparent 50%) left top / 50% 100% no-repeat,
+                linear-gradient(to bottom left, transparent calc(50% - 1.5px), rgba(255,255,255,.5) calc(50% - .5px), transparent 50%) right top / 50% 100% no-repeat; }
+  .flap .inside { transform: rotateX(180deg); clip-path: polygon(0 100%, 100% 100%, 54% 4.5%, 50% 0, 46% 4.5%);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4c6 7 10 11 10 17s-5 9-10 9-10-3-10-9 4-10 10-17zM0 40c7-4 15-4 22 0 7-4 15-4 22 0' fill='none' stroke='%23e6c983' stroke-width='1.3'/%3E%3C/svg%3E") 0 0 / 44px 44px,
+                linear-gradient(0deg, #5a1a2c, #3d1020); }
+  .flap-shadow { position: absolute; left: 0; right: 0; top: 0; height: 71.5%; z-index: 4; pointer-events: none;
+    clip-path: polygon(0 0, 100% 0, 54.5% 95%, 50% 100%, 45.5% 95%); background: rgba(40,25,10,.3); filter: blur(3px); transform: translateY(4px); transition: opacity .4s; }
+  /* the flap lifts toward the viewer, swings over its hinge and settles open behind the envelope */
+  .flap.open { animation: flapOpen 1.15s cubic-bezier(.5,.05,.25,1) forwards; }
+  @keyframes flapOpen { 0% { transform: rotateX(0deg); } 20% { transform: rotateX(32deg); } 55% { transform: rotateX(105deg); } 100% { transform: rotateX(180deg); } }
+  .flap.open .outside::after { animation: shadeOut 1.15s forwards; }
+  .flap.open .inside::after { animation: shadeIn 1.15s forwards; }
+  @keyframes shadeOut { 0% { opacity: 0; } 50% { opacity: .35; } 100% { opacity: .35; } }
+  @keyframes shadeIn { 0% { opacity: .45; } 50% { opacity: .45; } 100% { opacity: 0; } }
+  .flap.behind { z-index: 0; }
+  .opened .flap-shadow { opacity: 0; }
+  .z-card { z-index: 1; } .z-pocket { z-index: 3; }
+
+  /* wax seal */
+  .seal { position: absolute; z-index: 8; left: 50%; top: 66%; width: calc(var(--ew) * .27); aspect-ratio: 1; transform: translate(-50%, -50%);
+    border: 0; padding: 0; background: none; cursor: pointer; transition: transform .5s, opacity .6s; filter: drop-shadow(0 3px 3px rgba(0,0,0,.45)) drop-shadow(0 1px 1px rgba(0,0,0,.35)); }
+  .seal svg { overflow: visible; }
+  .seal svg { width: 100%; height: 100%; display: block; }
+  .seal:hover { transform: translate(-50%, -50%) scale(1.06) rotate(-3deg); }
+  .seal.crack { animation: crack .5s forwards; }
+  @keyframes crack { 30% { transform: translate(-50%, -50%) scale(1.1) rotate(4deg); } 100% { transform: translate(-50%, -30%) scale(.8) rotate(-12deg); opacity: 0; } }
+  .seal .pulse { position: absolute; inset: -18%; border-radius: 50%; border: 1px solid rgba(243,223,170,.6); animation: pulse 2.4s ease-out infinite; }
+  @keyframes pulse { from { transform: scale(.7); opacity: .9; } to { transform: scale(1.25); opacity: 0; } }
+
+  .hint { position: relative; z-index: 2; margin-top: calc(var(--eh) * .3); font-family: 'Cormorant Garamond', serif; font-style: italic;
+    letter-spacing: 1px; color: var(--gold-light); font-size: 17px; opacity: .85; transition: opacity .5s; text-align: center; }
+  .hint small { display: block; font-family: 'Bellefair', serif; font-style: normal; font-size: 14px; letter-spacing: 0; opacity: .8; margin-top: 4px; }
+  .hint.hidden { opacity: 0; }
+
+  /* ---------- invitation ---------- */
+  .invite { display: none; position: relative; z-index: 2; padding: 5vh 14px 40px; }
+  .invite.show { display: block; animation: rise 1.4s cubic-bezier(.25,.8,.3,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(80px) scale(.94) rotateX(12deg); } to { opacity: 1; transform: none; } }
+  .card { max-width: 460px; margin: 0 auto; position: relative; padding: 46px 30px 44px; text-align: center; color: var(--ink);
+    background: radial-gradient(ellipse at 50% 0%, #fffdf7, var(--ivory) 60%, #f3ead8 100%); border-radius: 4px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(212,175,106,.3); }
+  .card .frame { position: absolute; inset: 12px; border: 1.5px solid var(--gold); pointer-events: none; }
+  .card .frame::after { content: ''; position: absolute; inset: 5px; border: .5px solid rgba(168,129,60,.55); }
+  .corner { position: absolute; width: 58px; height: 58px; pointer-events: none; }
+  .corner.tl { top: 6px; left: 6px; } .corner.tr { top: 6px; right: 6px; transform: scaleX(-1); }
+  .corner.bl { bottom: 6px; left: 6px; transform: scaleY(-1); } .corner.br { bottom: 6px; right: 6px; transform: scale(-1, -1); }
+  .mask-art { width: 150px; margin: 4px auto 8px; display: block; }
+  .eyebrow { font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 3px; font-size: 15px; color: var(--gold-deep); direction: ltr; margin: 0; }
+  .opening { font-size: 17px; line-height: 1.85; margin: 14px 0 6px; color: #4d4050; font-weight: 300; }
+  .names { font-weight: 400; font-size: 32px; line-height: 1.2; margin: 14px 0 4px; color: var(--ink); }
+  .amp { display: block; font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 46px; color: var(--gold-deep); line-height: 1; margin: 2px 0; }
+  .script-names { font-family: 'Pinyon Script', cursive; font-size: 30px; color: var(--gold-deep); direction: ltr; margin: 6px 0 0; }
+  .ornament { width: 180px; margin: 18px auto; display: block; }
+  .date { font-size: 22px; margin: 0; font-weight: 400; }
+  .hebdate { font-size: 15px; color: #7a6a73; margin: 4px 0 0; }
+  .times { display: flex; justify-content: center; gap: 0; margin: 20px auto 0; max-width: 300px; }
+  .times div { flex: 1; font-size: 15px; color: #5f5160; }
+  .times div + div { border-inline-start: 1px solid rgba(168,129,60,.5); }
+  .times strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; color: var(--ink); direction: ltr; }
+  .venue { margin: 22px 0 0; font-size: 21px; font-weight: 400; }
+  .address { font-size: 15px; color: #7a6a73; margin: 2px 0 0; }
+  .closing { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold-deep); font-size: 17px; margin: 22px 0 0; direction: ltr; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; position: relative; z-index: 1; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 999px; text-decoration: none; font-size: 15px;
+    font-family: inherit; border: 1px solid var(--gold-deep); color: var(--gold-deep); background: transparent; cursor: pointer; transition: background .2s; }
+  .btn:hover { background: rgba(212,175,106,.12); }
+  .btn.primary { background: linear-gradient(180deg, #6e1f33, #4f1424); color: var(--gold-light); border-color: #4f1424; }
+
+  /* ---------- language toggle + tabs ---------- */
+  .lang { position: fixed; z-index: 60; bottom: 14px; left: 14px; border: 1px solid rgba(212,175,106,.5); background: rgba(20,12,28,.7);
+    color: var(--gold-light); border-radius: 999px; padding: 6px 13px; font-family: 'Cormorant Garamond', serif; font-size: 15px; letter-spacing: 1px; cursor: pointer; }
+  .tabs { position: sticky; top: 10px; z-index: 20; display: flex; gap: 4px; max-width: 460px; margin: 0 auto 22px; padding: 5px; border-radius: 999px;
+    background: rgba(20,12,28,.8); border: 1px solid rgba(212,175,106,.35); backdrop-filter: blur(6px); }
+  .tabs button { flex: 1; border: 0; background: none; color: var(--gold-light); font-family: inherit; font-size: 15px; padding: 9px 6px; border-radius: 999px; cursor: pointer; }
+  .tabs button.active { background: linear-gradient(115deg, #a8813c, #f6e3ad 45%, #c99b4f 70%, #e9cf8c); color: #2b1a10; }
+  .panel { display: none; } .panel.active { display: block; animation: fadeIn .5s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .parents { display: flex; justify-content: center; gap: 0; margin: 4px auto 0; max-width: 340px; font-size: 15px; color: #5f5160; }
+  .parents div { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .parents div + div { border-inline-start: 1px solid rgba(168,129,60,.45); }
+  .parents b { font-weight: 400; color: var(--gold-deep); font-size: 14px; }
+  .map { margin: 18px 0 4px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(212,175,106,.35); aspect-ratio: 4 / 3; background: rgba(255,255,255,.05); }
+  .map { aspect-ratio: 600 / 540; border-color: rgba(212,175,106,.6); }
+  .map-svg { width: 100%; height: 100%; display: block; }
+  .pin { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+    border: 2px solid #fff; box-shadow: 0 3px 8px rgba(0,0,0,.45); }
+  .pin span { transform: rotate(45deg); color: #fff; font-size: 15px; font-weight: 700; font-family: 'Cormorant Garamond', serif; }
+  .pin.hall { background: linear-gradient(135deg, #e3c27a, #a8813c); } .pin.hall span { color: #2b1a10; font-size: 17px; }
+  .pin.p1 { background: linear-gradient(135deg, #a8344c, #6e1f33); }
+  .pin.p2 { background: linear-gradient(135deg, #3d5a9e, #1f2b4f); }
+  .pop { text-align: center; min-width: 150px; font-size: 14px; color: #2b2230; }
+  .pop b { display: block; font-size: 15px; margin-bottom: 6px; }
+  .pop .nav { display: flex; gap: 6px; justify-content: center; }
+  .pop a { padding: 5px 10px; border-radius: 999px; text-decoration: none; font-size: 13px; background: #6e1f33; color: #f8ead0 !important; }
+  .pop a + a { background: #fff; color: #6e1f33 !important; border: 1px solid #6e1f33; }
+  .places { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  .places li { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(212,175,106,.25); cursor: pointer; }
+  .places .dot { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-family: 'Cormorant Garamond', serif; color: #fff; }
+  .places .dot.hall { font-size: 13px; letter-spacing: -2px; } .places .dot.hall { background: linear-gradient(135deg, #e3c27a, #a8813c); color: #2b1a10; } .places .dot.p1 { background: #6e1f33; } .places .dot.p2 { background: #2c3f73; }
+  .places .txt { flex: 1; min-width: 0; } .places .txt b { display: block; font-weight: 400; color: var(--gold-light); font-size: 17px; } .places .txt small { color: rgba(251,246,236,.7); font-size: 13px; }
+  .places .nav { display: flex; flex-direction: column; gap: 6px; }
+  .places .nav a { text-align: center; padding: 6px 12px; border-radius: 999px; text-decoration: none; font-size: 13px; border: 1px solid rgba(212,175,106,.6); color: var(--gold-light); white-space: nowrap; }
+  .places .nav a.waze { background: linear-gradient(115deg, #a8813c, #f6e3ad 45%, #c99b4f 70%, #e9cf8c); color: #2b1a10; border: 0; }
+  .arrival .actions { margin-top: 14px; }
+  .arrival .btn { color: var(--gold-light); border-color: rgba(212,175,106,.6); }
+  [dir=ltr] .names { font-family: 'Cormorant Garamond', serif; font-weight: 600; }
+  [dir=ltr] .opening, [dir=ltr] .msg { font-family: 'Cormorant Garamond', serif; font-size: 18px; }
+  /* ---------- RSVP ---------- */
+  .rsvp { max-width: 460px; margin: 0 auto; padding: 30px 26px; border-radius: 14px; color: var(--ivory);
+    background: linear-gradient(180deg, rgba(40,24,48,.85), rgba(28,16,36,.9)); border: 1px solid rgba(212,175,106,.35);
+    box-shadow: 0 20px 50px rgba(0,0,0,.4); backdrop-filter: blur(6px); }
+  .rsvp h2 { text-align: center; font-weight: 400; margin: 0 0 4px; font-size: 26px; color: var(--gold-light); }
+  .rsvp .sub { text-align: center; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold); margin: 0 0 14px; direction: ltr; }
+  .msg { text-align: center; font-size: 17px; line-height: 1.6; margin: 0; }
+  form label { display: block; margin: 16px 0 6px; color: var(--gold-light); }
+  form input[type=number], form textarea { width: 100%; padding: 11px; border-radius: 8px; font-size: 16px; font-family: inherit;
+    border: 1px solid rgba(212,175,106,.4); background: rgba(255,255,255,.06); color: var(--ivory); }
+  form textarea::placeholder { color: rgba(251,246,236,.45); }
+  .choice { display: flex; gap: 10px; }
+  .choice button { flex: 1; padding: 12px; border-radius: 10px; font-size: 16px; cursor: pointer; font-family: inherit;
+    border: 1px solid rgba(212,175,106,.45); background: transparent; color: var(--ivory); }
+  .choice button.selected { background: rgba(212,175,106,.2); border-color: var(--gold); color: var(--gold-light); }
+  #submit { width: 100%; margin-top: 22px; padding: 14px; border: 0; border-radius: 10px; font-size: 18px; cursor: pointer; font-family: inherit;
+    background: linear-gradient(180deg, var(--gold-light), var(--gold) 60%, var(--gold-deep)); color: #2b1a10; font-weight: 500; }
+  #submit:disabled { opacity: .45; cursor: default; }
+  .hidden { display: none !important; }
+  footer { text-align: center; color: rgba(243,223,170,.6); font-size: 14px; margin: 30px 0 10px; }
+</style>
+</head>
+<body class="locked">
+  <button class="lang" id="lang" aria-label="Language">EN</button>
+  <div class="damask"></div>
+  <div class="bokeh" id="bokeh"></div>
+  <div class="dust" id="dust"></div>
+
+  <!-- reusable SVG pieces -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f6e3ad"/><stop offset=".45" stop-color="#d4af6a"/><stop offset=".7" stop-color="#a8813c"/><stop offset="1" stop-color="#e9cf8c"/>
+      </linearGradient>
+      <radialGradient id="waxGrad" cx=".38" cy=".32" r=".75">
+        <stop offset="0" stop-color="#a8344c"/><stop offset=".55" stop-color="#6e1f33"/><stop offset="1" stop-color="#3f0f1d"/>
+      </radialGradient>
+      <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation=".8" result="b"/>
+        <feSpecularLighting in="b" surfaceScale="2.2" specularConstant=".9" specularExponent="18" lighting-color="#fff" result="s"><fePointLight x="-40" y="-60" z="90"/></feSpecularLighting>
+        <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+        <feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k1="0" k2="1" k3=".55" k4="0"/>
+      </filter>
+      <filter id="waxTex"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="t"/>
+        <feColorMatrix in="t" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .18 0" result="tn"/>
+        <feComposite in="tn" in2="SourceGraphic" operator="in" result="tc"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="tc"/></feMerge></filter>
+      <symbol id="mask" viewBox="-110 -70 220 120">
+        <!-- feathers on the right side -->
+        <g fill="none" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round">
+          <path d="M62 -22 C70 -45 80 -58 96 -66 C92 -50 84 -36 66 -20"/>
+          <path d="M70 -14 C84 -30 96 -36 108 -38 C100 -26 90 -18 72 -10"/>
+          <path d="M55 -26 C56 -46 60 -60 70 -68 C72 -52 66 -38 58 -24"/>
+          <path d="M80 -55 l-4 6 M88 -50 l-5 6 M72 -60 l-2 7 M95 -33 l-6 4 M101 -36 l-5 5"/>
+        </g>
+        <!-- mask body -->
+        <path fill="url(#goldGrad)" d="M-92 -2 C-88 -30 -46 -40 0 -18 C46 -40 88 -30 92 -2 C88 24 50 36 22 22 C12 16 6 12 0 14 C-6 12 -12 16 -22 22 C-50 36 -88 24 -92 -2 Z"/>
+        <!-- eye holes -->
+        <path fill="#2b2230" d="M-66 -4 C-58 -18 -30 -18 -20 -2 C-30 8 -56 10 -66 -4 Z M66 -4 C58 -18 30 -18 20 -2 C30 8 56 10 66 -4 Z"/>
+        <!-- filigree -->
+        <g fill="none" stroke="#7c5a22" stroke-width="1.2" opacity=".7">
+          <path d="M-80 6 C-70 16 -52 20 -40 14 M80 6 C70 16 52 20 40 14"/>
+          <path d="M-74 -18 C-62 -28 -42 -28 -30 -20 M74 -18 C62 -28 42 -28 30 -20"/>
+          <path d="M0 -10 C-4 -2 -4 4 0 8 C4 4 4 -2 0 -10 Z"/>
+          <circle cx="-84" cy="-4" r="2.5"/><circle cx="84" cy="-4" r="2.5"/>
+        </g>
+        <!-- ribbon -->
+        <path d="M-92 -2 C-100 4 -104 18 -98 36 M-92 -2 C-104 0 -110 10 -108 24" fill="none" stroke="#6e1f33" stroke-width="2.5" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="corner" viewBox="0 0 60 60">
+        <g fill="none" stroke="url(#goldGrad)" stroke-width="1.6" stroke-linecap="round">
+          <path d="M4 56 V14 C4 8 8 4 14 4 H56"/>
+          <path d="M10 46 C10 22 22 10 46 10"/>
+          <path d="M14 30 C18 26 24 26 26 30 C28 34 24 38 20 36 M30 14 C26 18 26 24 30 26 C34 28 38 24 36 20"/>
+          <circle cx="10" cy="10" r="2.6" fill="#d4af6a" stroke="none"/>
+        </g>
+      </symbol>
+      <symbol id="ornament" viewBox="0 0 200 20">
+        <g fill="none" stroke="url(#goldGrad)" stroke-width="1.4" stroke-linecap="round">
+          <path d="M10 10 H78 M122 10 H190"/>
+          <path d="M78 10 C86 2 94 2 100 10 C106 18 114 18 122 10 M78 10 C86 18 94 18 100 10 C106 2 114 2 122 10"/>
+        </g>
+        <circle cx="100" cy="10" r="2.5" fill="#d4af6a"/><circle cx="10" cy="10" r="1.8" fill="#d4af6a"/><circle cx="190" cy="10" r="1.8" fill="#d4af6a"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- envelope -->
+  <section class="scene" id="scene">
+    <div class="tilt" id="tilt">
+      <div class="envelope" id="envelope">
+        <div class="env-shadow"></div>
+        <div class="env-back"><div class="liner"></div></div>
+        <div class="card-peek z-card" id="peek">
+          <svg viewBox="-110 -70 220 120"><use href="#mask" x="-110" y="-70" width="220" height="120"/></svg>
+          <div class="script">Ariel &amp; Or</div>
+        </div>
+        <div class="pocket z-pocket">
+          <div class="fold-left linen"></div>
+          <div class="fold-right linen"></div>
+          <div class="fold-bottom linen"></div>
+          <div class="edge"></div>
+        </div>
+        <div class="flap-shadow"></div>
+        <div class="flap" id="flap">
+          <div class="face outside linen"></div>
+          <div class="face inside"></div>
+        </div>
+        <button class="seal" id="seal" aria-label="Open">
+          <span class="pulse"></span>
+          <svg viewBox="0 0 100 100" id="sealSvg"></svg>
+        </button>
+      </div>
+    </div>
+    <div class="hint" id="hint">You are cordially invited<small data-i18n="hint">לחצו על המעטפה לפתיחת ההזמנה</small></div>
+  </section>
+
+  <!-- invitation -->
+  <main class="invite" id="invite">
+    <nav class="tabs" id="tabs">
+      <button data-tab="invitation" class="active" data-i18n="tabInvite">ההזמנה</button>
+      <button data-tab="rsvp" data-i18n="tabRsvp">אישור הגעה</button>
+      <button data-tab="arrival" data-i18n="tabArrival">הגעה לאירוע</button>
+    </nav>
+
+    <section class="panel active" id="panel-invitation">
+      <article class="card">
+        <div class="frame"></div>
+        <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+        <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+        <svg class="mask-art" viewBox="-110 -70 220 120"><use href="#mask" x="-110" y="-70" width="220" height="120"/></svg>
+        <p class="eyebrow">A MASQUERADE BALL</p>
+        <p class="opening" data-i18n-html="opening">בשמחה ובהתרגשות<br>אנו מתכבדים להזמינכם<br>לנשף המסכות לכבוד חתונתנו</p>
+        <h1 class="names"><span data-i18n="groom">אריאל ברלינגר</span><span class="amp">&amp;</span><span data-i18n="bride">אור גנון</span></h1>
+        <p class="script-names">Ariel &amp; Or</p>
+        <svg class="ornament" viewBox="0 0 200 20"><use href="#ornament"/></svg>
+        <p class="date" data-i18n="date">יום ראשון, 28 במרץ 2027</p>
+        <p class="hebdate" data-i18n="hebdate">י״ט באדר ב׳ תשפ״ז</p>
+        <div class="times">
+          <div><strong>19:00</strong><span data-i18n="reception">קבלת פנים</span></div>
+          <div><strong>20:00</strong><span data-i18n="chuppah">חופה וקידושין</span></div>
+        </div>
+        <p class="venue" data-i18n="venue">אולמי סיאל · כינורות</p>
+        <p class="address" data-i18n="address">חלוצי התעשייה 36, מפרץ חיפה</p>
+        <svg class="ornament" viewBox="0 0 200 20"><use href="#ornament"/></svg>
+        <div class="parents">
+          <div><b data-i18n="groomParents">הורי החתן</b><span data-i18n="groomParentsNames">דוד ובתיה ברלינגר</span></div>
+          <div><b data-i18n="brideParents">הורי הכלה</b><span data-i18n="brideParentsNames">רינה גנון ועדי בן ארי</span></div>
+        </div>
+        <div class="actions">
+          <a class="btn" id="calendar" target="_blank" rel="noopener" data-i18n="addCal">הוספה ליומן</a>
+          <button class="btn primary" data-goto="rsvp" data-i18n="tabRsvp">אישור הגעה</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel" id="panel-rsvp">
+      <div class="rsvp">
+        <h2 data-i18n="tabRsvp">אישור הגעה</h2>
+        <p class="sub">Kindly reply</p>
+        <p class="msg" id="greeting"></p>
+        <form id="form" class="hidden">
+          <label data-i18n="q1">האם תצטרפו לנשף?</label>
+          <div class="choice">
+            <button type="button" data-value="yes" data-i18n="yes">בשמחה! 🥂</button>
+            <button type="button" data-value="no" data-i18n="no">לצערנו לא</button>
+          </div>
+          <div id="yesFields" class="hidden">
+            <label for="count" data-i18n="q2">כמה תהיו?</label>
+            <input type="number" id="count" min="1" value="1" inputmode="numeric">
+            <label for="dietary" data-i18n="q3">הגבלות תזונתיות (לא חובה)</label>
+            <textarea id="dietary" rows="2" data-i18n-ph="q3ph"></textarea>
+          </div>
+          <label for="notes" data-i18n="q4">רוצים להגיד לנו משהו? (לא חובה)</label>
+          <textarea id="notes" rows="2"></textarea>
+          <button type="submit" id="submit" disabled data-i18n="send">שליחה</button>
+        </form>
+        <p class="msg hidden" id="done"></p>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-arrival">
+      <div class="rsvp arrival">
+        <h2 data-i18n="tabArrival">הגעה לאירוע</h2>
+        <p class="sub">Getting there</p>
+        <p class="msg"><b data-i18n="venue">אולמי סיאל · כינורות</b><br><span data-i18n="address">חלוצי התעשייה 36, מפרץ חיפה</span></p>
+        <div class="map" id="map"><svg xmlns="http://www.w3.org/2000/svg" viewBox="200 110 600 540" class="map-svg" role="img" aria-label="map" font-family="Bellefair, serif" direction="rtl">
+  <!-- arrival_map: illustrated map of the area around Ciel hall, drawn from the satellite screenshot, with the entrance and two parking lots -->
+  <defs>
+    <pattern id="paper" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#f7f1e5"/><path d="M0 3h6M3 0v6" stroke="#efe6d4" stroke-width=".6"/></pattern>
+    <filter id="soft"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#3a2a10" flood-opacity=".25"/></filter>
+    <path id="r-main" d="M40 322 L1000 850"/>
+    <path id="r-yosef" d="M300 -10 L1000 400"/>
+    <path id="r-yaakov" d="M560 -10 L1000 248"/>
+    <path id="r-link" d="M345 486 L548 150 L640 -10"/>
+    <path id="r-west" d="M40 40 L478 262"/>
+    <path id="r-harash" d="M465 850 L540 610"/>
+    <path id="r-masger" d="M235 850 L318 497"/>
+    <path id="r-bniya" d="M40 640 L262 660"/>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="900" fill="url(#paper)"/>
+
+  <!-- blocks / greenery -->
+  <g opacity=".55">
+    <path d="M560 40 L1000 40 L1000 220 Z" fill="#dfe6d2"/>
+    <path d="M150 230 L330 330 L250 480 L90 390 Z" fill="#ece3d2"/>
+    <path d="M600 300 L860 440 L760 620 L520 490 Z" fill="#ece3d2"/>
+    <path d="M300 560 L520 680 L470 850 L220 850 Z" fill="#ece3d2"/>
+    <path d="M620 700 L900 850 L620 850 Z" fill="#ece3d2"/>
+  </g>
+
+  <!-- streets: casing then fill -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#d9c7a1">
+      <use href="#r-main" stroke-width="40"/>
+      <use href="#r-yosef" stroke-width="26"/><use href="#r-yaakov" stroke-width="22"/><use href="#r-link" stroke-width="22"/>
+      <use href="#r-west" stroke-width="20"/><use href="#r-harash" stroke-width="20"/><use href="#r-masger" stroke-width="20"/><use href="#r-bniya" stroke-width="18"/>
+    </g>
+    <g stroke="#fffdf8">
+      <use href="#r-main" stroke-width="35"/>
+      <use href="#r-yosef" stroke-width="21"/><use href="#r-yaakov" stroke-width="17"/><use href="#r-link" stroke-width="17"/>
+      <use href="#r-west" stroke-width="15"/><use href="#r-harash" stroke-width="15"/><use href="#r-masger" stroke-width="15"/><use href="#r-bniya" stroke-width="13"/>
+    </g>
+    <use href="#r-main" stroke="#e8d9b8" stroke-width="1.4" stroke-dasharray="14 12"/>
+    <!-- parking 1 driveway -->
+    <path d="M568 600 L630 472" stroke="#d9c7a1" stroke-width="20"/><path d="M568 600 L630 472" stroke="#fffdf8" stroke-width="15"/>
+  </g>
+
+  <!-- street names -->
+  <g fill="#6d5a3a" font-size="23" letter-spacing=".5">
+    <text dy="7"><textPath href="#r-main" startOffset="33%" text-anchor="middle">חלוצי התעשייה</textPath></text>
+    <text dy="6" font-size="21"><textPath href="#r-yosef" startOffset="48%" text-anchor="middle">יוסף לוי</textPath></text>
+    <text dy="5" font-size="20"><textPath href="#r-yaakov" startOffset="30%" text-anchor="middle">יעקב לוי</textPath></text>
+    <text dy="5" font-size="19"><textPath href="#r-harash" startOffset="50%" text-anchor="middle">החרש</textPath></text>
+    <text dy="5" font-size="19"><textPath href="#r-masger" startOffset="40%" text-anchor="middle">המסגר</textPath></text>
+    <text dy="5" font-size="19"><textPath href="#r-bniya" startOffset="60%" text-anchor="middle">הבנייה</textPath></text>
+  </g>
+
+  <!-- landmarks -->
+  <g font-size="18" fill="#8a7a63" text-anchor="middle">
+    <g transform="translate(520 330)"><rect x="-13" y="-13" width="26" height="26" rx="6" fill="#efe6d4" stroke="#c9b48a"/><text y="6" font-size="16">⛽</text><text y="34">תחנת דלק</text></g>
+  </g>
+
+  <!-- the hall -->
+  <path d="M452 462 L548 512 L530 548 L434 498 Z" fill="#e9dcc0" stroke="#c9a55c" stroke-width="2"/>
+  <text x="512" y="522" text-anchor="middle" font-size="17" fill="#6e1f33" transform="rotate(28 512 522)">סיאל</text>
+
+  <!-- walking route from parking 2 -->
+  <path d="M415 250 L476 262 L366 452 L462 530" fill="none" stroke="#2c3f73" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round" opacity=".7"/>
+
+  <!-- markers -->
+  <g filter="url(#soft)" font-family="Cormorant Garamond, Bellefair, serif" font-weight="700" text-anchor="middle">
+    <g transform="translate(470 534) scale(1.35)"><path d="M0 0 C-14 -16 -20 -26 -20 -36 A20 20 0 1 1 20 -36 C20 -26 14 -16 0 0 Z" fill="#c99b4f" stroke="#fff" stroke-width="2.5"/><text y="-29" font-size="13">👰🤵</text></g>
+    <g transform="translate(578 572) scale(1.35)"><path d="M0 0 C-14 -16 -20 -26 -20 -36 A20 20 0 1 1 20 -36 C20 -26 14 -16 0 0 Z" fill="#6e1f33" stroke="#fff" stroke-width="2.5"/><text y="-29" font-size="17" fill="#fff">P1</text></g>
+    <g transform="translate(415 250) scale(1.35)"><path d="M0 0 C-14 -16 -20 -26 -20 -36 A20 20 0 1 1 20 -36 C20 -26 14 -16 0 0 Z" fill="#2c3f73" stroke="#fff" stroke-width="2.5"/><text y="-29" font-size="17" fill="#fff">P2</text></g>
+  </g>
+
+  <!-- compass -->
+  <g transform="translate(760 600)" fill="#a8813c" text-anchor="middle" font-family="Cormorant Garamond, serif">
+    <circle r="26" fill="none" stroke="#c9a55c" stroke-width="1.2"/>
+    <path d="M0 -22 L6 0 L0 22 L-6 0 Z" fill="#c99b4f"/><path d="M0 -22 L6 0 L-6 0 Z" fill="#6e1f33"/>
+    <text y="-32" font-size="15">N</text>
+  </g>
+
+  <!-- frame -->
+  <rect x="206" y="116" width="588" height="528" fill="none" stroke="#c9a55c" stroke-width="2"/>
+  <rect x="213" y="123" width="574" height="514" fill="none" stroke="#c9a55c" stroke-width=".7"/>
+</svg>
+</div>
+        <ul class="places" id="places"></ul>
+      </div>
+    </section>
+
+    <footer data-i18n="footer">מחכים לרקוד איתכם 🎭 אריאל ואור</footer>
+  </main>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbz_eZhrnzHv-_QpbICCnRQFkcOFVJ9c1hiMPXn9vLFeUaHTQM4d96v3rEX6bE2xlxGe_w/exec';
+  const ADDRESS = 'חלוצי התעשייה 36, חיפה';
+  const $ = id => document.getElementById(id);
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const params = new URLSearchParams(location.search);
+  const guestId = params.get('g');
+  let attending = null, guestName = null, lang = 'he';
+
+  // ---- translations ----
+  const T = {
+    he: {
+      hint: 'לחצו על המעטפה לפתיחת ההזמנה', tabInvite: 'ההזמנה', tabRsvp: 'אישור הגעה', tabArrival: 'הגעה לאירוע',
+      opening: 'בשמחה ובהתרגשות<br>אנו מתכבדים להזמינכם<br>לנשף המסכות לכבוד חתונתנו',
+      bride: 'אור גנון', groom: 'אריאל ברלינגר', date: 'יום ראשון, 28 במרץ 2027', hebdate: 'י״ט באדר ב׳ תשפ״ז',
+      reception: 'קבלת פנים', chuppah: 'חופה וקידושין', venue: 'אולמי סיאל · כינורות', address: 'חלוצי התעשייה 36, מפרץ חיפה',
+      brideParents: 'הורי הכלה', brideParentsNames: 'רינה גנון ועדי בן ארי', groomParents: 'הורי החתן', groomParentsNames: 'דוד ובתיה ברלינגר',
+      addCal: 'הוספה ליומן', waze: 'Waze', gmaps: 'Google Maps',
+      pHall: 'הכניסה הראשית לאולם', pHallSub: 'חלוצי התעשייה 36', pP1: 'חניה 1 · חניית האולם', pP1Sub: 'מספר המקומות מוגבל', pP2: 'חניה 2 · חניה חינמית', pP2Sub: 'כ-200 מ׳ מהכניסה לאולם',
+      q1: 'האם תצטרפו לנשף?', yes: 'בשמחה! 🥂', no: 'לצערנו לא', q2: 'כמה תהיו?', q3: 'הגבלות תזונתיות (לא חובה)',
+      q3ph: 'צמחוני, טבעוני, ללא גלוטן, כשרות מהדרין...', q4: 'רוצים להגיד לנו משהו? (לא חובה)', send: 'שליחה', sending: 'שולח...',
+      footer: 'מחכים לרקוד איתכם 🎭 אריאל ואור',
+      noLink: 'לאישור הגעה, היכנסו דרך הקישור האישי ששלחנו לכם 💌', notFound: 'לא מצאנו את ההזמנה הזו. אפשר לפנות אלינו ישירות 💌',
+      loading: 'טוען...', loadErr: 'משהו השתבש בטעינה. נסו לרענן את הדף.', sendErr: 'משהו השתבש בשליחה, נסו שוב בבקשה.',
+      hello: n => n + ', נשמח לדעת אם תצטרפו אלינו 🥰', thanksYes: 'תודה! נתראה בנשף 🎭✨', thanksNo: 'תודה שעדכנתם, נתגעגע! ❤️',
+      calTitle: 'נשף המסכות של אריאל ואור 🎭', calDetails: '19:00 קבלת פנים · 20:00 חופה', toggle: 'EN',
+    },
+    en: {
+      hint: 'Tap the envelope to open', tabInvite: 'Invitation', tabRsvp: 'RSVP', tabArrival: 'Getting there',
+      opening: 'With great joy<br>we invite you to the masquerade ball<br>celebrating our wedding',
+      bride: 'Or Ganon', groom: 'Ariel Berlinger', date: 'Sunday, March 28, 2027', hebdate: '19 Adar II 5787',
+      reception: 'Reception', chuppah: 'Chuppah', venue: 'Ciel Halls · Kinorot', address: '36 Halutzei HaTaasiya St., Haifa Bay',
+      brideParents: 'Parents of the bride', brideParentsNames: 'Rina Ganon & Adi Ben Ari', groomParents: 'Parents of the groom', groomParentsNames: 'David & Batya Berlinger',
+      addCal: 'Add to calendar', waze: 'Waze', gmaps: 'Google Maps',
+      pHall: 'Main entrance', pHallSub: '36 Halutzei HaTaasiya St.', pP1: 'Parking 1 · Venue parking', pP1Sub: 'Limited spaces', pP2: 'Parking 2 · Free parking', pP2Sub: 'About 200 m from the entrance',
+      q1: 'Will you join us at the ball?', yes: 'With pleasure! 🥂', no: 'Regretfully, no', q2: 'How many of you?', q3: 'Dietary requirements (optional)',
+      q3ph: 'Vegetarian, vegan, gluten-free, mehadrin kosher...', q4: 'Anything you would like to tell us? (optional)', send: 'Send', sending: 'Sending...',
+      footer: 'We can’t wait to dance with you 🎭 Ariel & Or',
+      noLink: 'To RSVP, please use the personal link we sent you 💌', notFound: 'We couldn’t find this invitation. Feel free to contact us directly 💌',
+      loading: 'Loading...', loadErr: 'Something went wrong. Please refresh the page.', sendErr: 'Something went wrong. Please try again.',
+      hello: n => 'Dear ' + n + ', we would love to know if you can join us 🥰', thanksYes: 'Thank you! See you at the ball 🎭✨', thanksNo: 'Thank you for letting us know. We’ll miss you! ❤️',
+      calTitle: 'Ariel & Or’s Masquerade Ball 🎭', calDetails: '19:00 Reception · 20:00 Chuppah', toggle: 'עב',
+    },
+  };
+  const t = k => T[lang][k];
+
+  function setLang(l) {
+    lang = l;
+    document.documentElement.lang = l; document.documentElement.dir = l === 'he' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+    document.querySelectorAll('[data-i18n-html]').forEach(el => el.innerHTML = t(el.dataset.i18nHtml));
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => el.placeholder = t(el.dataset.i18nPh));
+    $('lang').textContent = t('toggle');
+    $('calendar').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(t('calTitle'))
+      + '&dates=20270328T160000Z/20270328T230000Z&details=' + encodeURIComponent(t('calDetails'))
+      + '&location=' + encodeURIComponent('Ciel, ' + ADDRESS);
+    renderGreeting(); if (typeof renderPlaces === 'function') renderPlaces();
+    try { localStorage.setItem('lang', l); } catch (e) {}
+  }
+  $('lang').addEventListener('click', () => setLang(lang === 'he' ? 'en' : 'he'));
+
+  // ---- tabs ----
+  function showTab(name) {
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+    $('tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => showTab(b.dataset.goto)));
+
+  // ---- arrival map: entrance + two parking lots, each opens Waze or Google Maps ----
+  const PLACES = [
+    { id: 'hall', label: '👰🤵', name: 'pHall', sub: 'pHallSub', lat: 32.8132528, lng: 35.0651408, gmaps: 'https://maps.app.goo.gl/7E8Jcxh7gfwsHcde6' },
+    { id: 'p1', label: 'P1', name: 'pP1', sub: 'pP1Sub', lat: 32.813067, lng: 35.065388,  /* estimated from the marked satellite image */ gmaps: 'https://maps.app.goo.gl/yyXj2aDDnyP2fkao6' },
+    { id: 'p2', label: 'P2', name: 'pP2', sub: 'pP2Sub', lat: 32.814696, lng: 35.064265, gmaps: 'https://maps.app.goo.gl/e9CZF57fwSmjH6ye9' },
+  ];
+  const wazeUrl = p => `https://waze.com/ul?ll=${p.lat},${p.lng}&navigate=yes`;
+  function navButtons(p) { return (p.lat ? `<a class="waze" href="${wazeUrl(p)}" target="_blank" rel="noopener">Waze</a>` : '') + `<a href="${p.gmaps}" target="_blank" rel="noopener">Google Maps</a>`; }
+  function renderPlaces() {
+    $('places').innerHTML = PLACES.map(p => `<li data-id="${p.id}"><span class="dot ${p.id}">${p.label}</span>
+      <span class="txt"><b>${t(p.name)}</b><small>${t(p.sub)}</small></span><span class="nav">${navButtons(p)}</span></li>`).join('');
+  }
+  // ---- burgundy wax seal: poured edge, pressed ring, embossed OA monogram ----
+  (function drawSeal() {
+    const hi = '#c4566c', mid = '#7a1f33', lo = '#3a0b17', mono = '#5c1526', seed = 5;
+    let d = '';
+    for (let i = 0; i <= 120; i++) {
+      const a = i / 120 * Math.PI * 2;
+      const r = 44 + 1.1 * Math.sin(a * 7 + seed) + .9 * Math.sin(a * 11 + seed * 2.3) + .6 * Math.sin(a * 19 + seed * 4.1) + 2.6 * Math.pow(Math.max(0, Math.sin(a * 3 + seed)), 6);
+      d += (i ? 'L' : 'M') + (50 + Math.cos(a) * r).toFixed(2) + ',' + (50 + Math.sin(a) * r).toFixed(2);
+    }
+    $('sealSvg').innerHTML = `
+      <defs><radialGradient id="wx" cx=".36" cy=".3" r=".85"><stop offset="0" stop-color="${hi}"/><stop offset=".5" stop-color="${mid}"/><stop offset="1" stop-color="${lo}"/></radialGradient>
+            <radialGradient id="wxi" cx=".6" cy=".7" r=".7"><stop offset="0" stop-color="${hi}" stop-opacity="0"/><stop offset="1" stop-color="${lo}" stop-opacity=".5"/></radialGradient></defs>
+      <path d="${d}Z" fill="url(#wx)" filter="url(#waxTex)"/>
+      <circle cx="50" cy="50" r="33" fill="url(#wx)"/><circle cx="50" cy="50" r="33" fill="url(#wxi)"/>
+      <circle cx="50" cy="50" r="33.5" fill="none" stroke="${lo}" stroke-opacity=".55" stroke-width="2.2"/>
+      <circle cx="49.2" cy="49.2" r="34.6" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1"/>
+      <circle cx="50" cy="50" r="28" fill="none" stroke="${mono}" stroke-width=".8" stroke-dasharray="1 2.2" opacity=".8"/>
+      <text x="50" y="61" text-anchor="middle" font-family="Pinyon Script, cursive" font-size="32" fill="${mono}" filter="url(#emboss)">AO</text>
+      <ellipse cx="33" cy="26" rx="13" ry="5" fill="#fff" opacity=".25" transform="rotate(-35 33 26)"/>`;
+  })();
+
+  // ---- candle bokeh and drifting gold dust ----
+  for (let i = 0; i < 14; i++) {
+    const b = document.createElement('i'); const s = rand(40, 160);
+    b.style.cssText = `width:${s}px;height:${s}px;left:${rand(-5, 95)}vw;top:${rand(-5, 95)}vh`;
+    b.style.setProperty('--b', rand(6, 18) + 'px'); b.style.setProperty('--d', rand(3, 7) + 's'); b.style.setProperty('--delay', rand(0, 4) + 's');
+    $('bokeh').appendChild(b);
+  }
+  for (let i = 0; i < 45; i++) {
+    const d = document.createElement('i');
+    d.style.left = rand(0, 100) + 'vw'; d.style.top = rand(40, 110) + 'vh';
+    d.style.setProperty('--s', rand(1.5, 3.5) + 'px'); d.style.setProperty('--d', rand(8, 16) + 's');
+    d.style.setProperty('--delay', rand(-16, 0) + 's'); d.style.setProperty('--x', rand(-8, 8) + 'vw');
+    $('dust').appendChild(d);
+  }
+
+  // ---- envelope follows the pointer slightly (feels like a real object) ----
+  const tilt = $('tilt');
+  window.addEventListener('pointermove', e => {
+    if (document.body.classList.contains('opened')) return;
+    const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+    tilt.style.transform = `rotateY(${x * -10}deg) rotateX(${y * 8}deg)`;
+  });
+
+  // ---- opening sequence ----
+  $('envelope').addEventListener('click', () => {
+    if (document.body.classList.contains('opened')) return;
+    const at = (ms, fn) => setTimeout(fn, ms);
+    document.body.classList.add('opened'); tilt.style.transform = '';
+    $('seal').classList.add('crack'); $('hint').classList.add('hidden');
+    at(450, () => $('flap').classList.add('open'));
+    at(1100, () => $('flap').classList.add('behind'));
+    at(1250, () => $('peek').classList.add('out'));
+    at(2700, () => $('envelope').classList.add('leave'));
+    at(3500, () => {
+      $('scene').classList.add('hidden');
+      document.body.classList.remove('locked');
+      $('invite').classList.add('show');
+      window.scrollTo(0, 0);
+    });
+  });
+
+  // ---- RSVP ----
+  let rsvpState = 'loading';
+  function renderGreeting() {
+    const g = $('greeting');
+    if (rsvpState === 'found') g.textContent = t('hello')(guestName);
+    else if (rsvpState === 'done') return;
+    else g.textContent = t({ loading: 'loading', nolink: 'noLink', notfound: 'notFound', error: 'loadErr', senderr: 'sendErr' }[rsvpState]);
+    if (rsvpState === 'done-yes' || rsvpState === 'done-no') return;
+  }
+  async function loadGuest() {
+    if (!guestId) { rsvpState = 'nolink'; renderGreeting(); return; }
+    try {
+      const data = await (await fetch(API_URL + '?id=' + encodeURIComponent(guestId))).json();
+      if (!data.found) { rsvpState = 'notfound'; renderGreeting(); return; }
+      guestName = data.name; rsvpState = 'found'; renderGreeting();
+      $('form').classList.remove('hidden');
+    } catch (err) { rsvpState = 'error'; renderGreeting(); }
+  }
+  document.querySelectorAll('.choice button').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.choice button').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected'); attending = btn.dataset.value;
+    $('yesFields').classList.toggle('hidden', attending !== 'yes'); $('submit').disabled = false;
+  }));
+  $('form').addEventListener('submit', async e => {
+    e.preventDefault(); $('submit').disabled = true; $('submit').textContent = t('sending');
+    const payload = { id: guestId, attending, count: attending === 'yes' ? Number($('count').value) : 0,
+      dietary: attending === 'yes' ? $('dietary').value.trim() : '', notes: $('notes').value.trim() };
+    try {
+      // text/plain avoids a CORS preflight request, which Apps Script does not support
+      const data = await (await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) })).json();
+      if (!data.ok) throw new Error(data.error);
+      $('form').classList.add('hidden'); $('greeting').classList.add('hidden');
+      $('done').setAttribute('data-i18n', attending === 'yes' ? 'thanksYes' : 'thanksNo');
+      $('done').textContent = t(attending === 'yes' ? 'thanksYes' : 'thanksNo'); $('done').classList.remove('hidden');
+    } catch (err) {
+      $('submit').disabled = false; $('submit').textContent = t('send'); rsvpState = 'senderr'; renderGreeting();
+    }
+  });
+
+  // language: ?lang=en in the link, otherwise the guest's last choice, otherwise Hebrew
+  let startLang = params.get('lang');
+  if (!startLang) { try { startLang = localStorage.getItem('lang'); } catch (e) {} }
+  setLang(startLang === 'en' ? 'en' : 'he');
+  loadGuest();
+</script>
+</body>
+</html>
